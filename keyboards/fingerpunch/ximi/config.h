@@ -173,7 +173,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef FP_TRACKBALL_ENABLE
     // Trackball config
     #define PMW33XX_CS_PIN GP9
-    #define PMW33XX_CPI 1000
+    #define PMW33XX_CPI 6000
     #define PMW33XX_CS_DIVISOR 8
 
     /* SPI config for pmw3360 sensor. */

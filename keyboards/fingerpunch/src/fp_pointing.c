@@ -32,6 +32,8 @@ static bool zooming_keycode_enabled = false;
 static bool zooming_layer_enabled = false;
 static bool zooming_hold = false;
 
+static uint8_t virtua_dpi = FP_POINTING_DEFAULT_DPI;
+
 #ifdef POINTING_DEVICE_COMBINED
 void fp_compile_check_combined_default_modes(void) {
     // assert that either both LEFT values are false or only one of them is true
@@ -59,7 +61,8 @@ uint8_t fp_get_cpi_value_from_mode(uint8_t mode_index) {
 
 #ifndef POINTING_DEVICE_COMBINED
 void fp_set_cpi(uint8_t value) {
-    pointing_device_set_cpi((uint16_t)value * FP_POINTING_DPI_MULTIPLIER);
+    //pointing_device_set_cpi((uint16_t)value * FP_POINTING_DPI_MULTIPLIER);
+    virtua_dpi = value;
     xprintf("fp_set_cpi: setting value to: %d\n", ((uint16_t)value * FP_POINTING_DPI_MULTIPLIER));
 }
 
@@ -189,7 +192,7 @@ void fp_apply_dpi_defaults(void) {
     if (FP_POINTING_COMBINED_SNIPING_RIGHT) {
         right_mode = FP_SNIPING_MODE;
     }
-    
+
     fp_set_cpi_combined_by_mode(left_mode, right_mode);
 #else
     fp_set_cpi_by_mode(FP_POINTING_MODE);
@@ -287,6 +290,9 @@ uint32_t fp_zoom_unset_hold(uint32_t triger_time, void *cb_arg) {
     return 0;
 }
 
+float scroll_acc_h = 0;
+float scroll_acc_v = 0;
+
 report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
 #ifdef CONSOLE_ENABLE
     if (mouse_report.x != 0) {
@@ -296,9 +302,22 @@ report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
         xprintf("fingerpunch mouse report y: %d\n", mouse_report.y);
     }
 #endif
+
+    float dpi_coeff = (float)virtua_dpi / fp_config.pointing_dpi;
+
     if (fp_scroll_layer_get() || fp_scroll_keycode_get()) {
-        mouse_report.h = mouse_report.x;
-        mouse_report.v = -mouse_report.y;
+        // compute scroll delta
+        scroll_acc_h += (float)mouse_report.x * dpi_coeff;
+        scroll_acc_v += (float)-mouse_report.y * dpi_coeff;
+
+        // assign integer parts to mouse_report
+        mouse_report.h = (int8_t)scroll_acc_h;
+        mouse_report.v = (int8_t)scroll_acc_v;
+
+        // remove integer parts from acc
+        scroll_acc_h -= mouse_report.h;
+        scroll_acc_v -= mouse_report.v;
+
         mouse_report.x = 0;
         mouse_report.y = 0;
     } else if (fp_zoom_layer_get() || fp_zoom_keycode_get()) {

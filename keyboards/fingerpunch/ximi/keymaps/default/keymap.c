@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Default config uses home row mods. So hold each of the keys on the home row to use ctrl, gui, alt, or shift
 [_DVORAK] = LAYOUT_ximi(
   KC_ESC,       KC_SCLN,         KC_COMM,         KC_DOT,         KC_P,         KC_Y,         KC_F,    KC_G,         KC_C,         KC_R,      KC_L,   KC_SLSH,
-  KC_TAB,       LCTL_T(KC_A), LGUI_T(KC_O), LALT_T(KC_E), LSFT_T(KC_U), KC_I,         KC_D,    RSFT_T(KC_H), RALT_T(KC_T), RGUI_T(KC_N), RCTL_T(KC_S), KC_MINS,
+  LT(_LOWER, KC_TAB),       LCTL_T(KC_A), LGUI_T(KC_O), LALT_T(KC_E), LSFT_T(KC_U), MT(MOD_HYPR, KC_I),         MT(MOD_HYPR, KC_D),    RSFT_T(KC_H), RALT_T(KC_T), RGUI_T(KC_N), RCTL_T(KC_S), LT(_LOWER, KC_MINS),
   KC_LSFT,      KC_QUOT,         KC_Q,         KC_J,         KC_K,         KC_X,         KC_B,    KC_M,         KC_W,      KC_V,       KC_Z,      KC_ENT,
                 KC_MUTE,                    LOWER,        C(S(A(KC_LGUI))),       KC_MS_BTN1,      KC_BSPC, KC_SPC,       RAISE,                      KC_MUTE,
                                             C(KC_Z),      C(S(KC_Z)),   C(KC_Y),      KC_VOLD, KC_MUTE,      KC_VOLU
@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Default config uses home row mods. So hold each of the keys on the home row to use ctrl, gui, alt, or shift
 [_COLEMAK] = LAYOUT_ximi(
   KC_ESC,       KC_Q,         KC_W,         KC_F,         KC_P,         KC_B,         KC_J,    KC_L,         KC_U,         KC_Y,         KC_SCLN,      KC_BSLS,
-  KC_TAB,       LCTL_T(KC_A), LGUI_T(KC_R), LALT_T(KC_S), LSFT_T(KC_T), KC_G,         KC_M,    RSFT_T(KC_N), RALT_T(KC_E), RGUI_T(KC_I), RCTL_T(KC_O), KC_QUOT,
+  KC_TAB,       LCTL_T(KC_A), LGUI_T(KC_R), LALT_T(KC_S), LSFT_T(KC_T), MT(MOD_HYPR, KC_G),         MT(MOD_HYPR, KC_M),    RSFT_T(KC_N), RALT_T(KC_E), RGUI_T(KC_I), RCTL_T(KC_O), KC_QUOT,
   KC_LSFT,      KC_Z,         KC_X,         KC_C,         KC_D,         KC_V,         KC_K,    KC_H,         KC_COMM,      KC_DOT,       KC_SLSH,      KC_ENT,
                 KC_MUTE,                    LOWER,        C(S(A(KC_LGUI))),       KC_MS_BTN1,      KC_BSPC, KC_SPC,       RAISE,                      KC_MUTE,
                                             C(KC_Z),      C(S(KC_Z)),   C(KC_Y),      KC_VOLD, KC_MUTE,      KC_VOLU
@@ -101,11 +101,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Raise
  *
  * ,-----------------------------------------.           ,-----------------------------------------.
- * | ____ |   1  |   2  |   3  |   4  |   5  |           |   6  |   7  |   8  |   9  |   0  | ____ |
+ * | ____ |      |      |  up  |      |      |           |      |   5  |   6  |  7   |  8   |   9  |
  * |------+------+------+------+------+------|           |------+------+------+------+------+------|
- * | ____ | Left | Down |  Up  | Right| Tab  |           |      |   -  |   =  |   [  |   ]  | ____ |
+ * | ____ |   (  | lft  |  dn  | rht  |  )   |           |   0  |   1  |   2  |  3   |  4   | ____ |
  * |------+------+------+------+------+------|           |------+------+------+------+------+------|
- * | ____ |  Ctrl|   `  |  GUI |  Alt |      |           |      |      |      |   \  |   '  | ____ |
+ * | ____ |   [  |   {  |  }   |   ]  |      |           |      |      |      |      |      | ____ |
  * `-----------------------------------------'           `-----------------------------------------'
  *        ,------.         ,--------------------.    ,--------------------.          ,------.
  *        | MUTE |         | LOWER|      |      |    |      |      | RAISE|          | MUTE |
@@ -115,21 +115,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                         `--------------------'    `--------------------.
  */
 [_RAISE] = LAYOUT_ximi(
-  _______,      KC_1,    KC_2,    KC_3,    KC_4,    KC_5,         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-  _______,      KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TAB,       _______, KC_MINS, KC_EQL,  KC_TILD, KC_RBRC, _______,
-  _______,      KC_LCTL, KC_GRV,  KC_LGUI, KC_LALT, _______,      _______, _______, _______, KC_BSLS, KC_QUOT, _______,
-                _______,          _______, _______, _______,      _______, _______, _______,          _______,
-                                  _______, _______, _______,      _______, _______, _______
+  _______, _______, _______, KC_UP  , _______, _______,   /**/  _______, KC_5   , KC_6   , KC_7   , KC_8   , KC_9   ,
+  _______, KC_LPRN, KC_LEFT, KC_DOWN, KC_RGHT, KC_RPRN,   /**/  KC_0   , KC_1   , KC_2   , KC_3   , KC_4   , _______,
+  _______, KC_LBRC, KC_LCBR, KC_RCBR, KC_RBRC, _______,   /**/  _______, _______, _______, _______, _______, _______,
+
+                _______,          _______, _______, _______,                _______, _______, _______,          _______,
+                                  _______, _______, _______,                _______, _______, _______
 ),
 
 /* Lower
  *
  * ,-----------------------------------------.           ,-----------------------------------------.
- * | ____ |   !  |   @  |   #  |   $  |   %  |           |   ^  |   &  |   *  |   (  |   )  | ____ |
+ * | ____ |      |      |      |  p+  |      |           |      |  g`  |  c^  |  r%  |      | ____ |
  * |------+------+------+------+------+------|           |------+------+------+------+------+------|
- * | ____ |  Esc |      |      |      |EECLR |           |      |   _  |   +  |   {  |   }  | ____ |
+ * | ____ |  a@  |  o|  |  e=  |      |      |           |      |  h#  |  t~  |  n!  |  s$  | ____ |
  * |------+------+------+------+------+------|           |------+------+------+------+------+------|
- * | ____ |  Caps|   ~  |      |Reset |Btldr |           |      |      |      |   |  |   '  | ____ |
+ * | ____ |      |      |      |      |  x*  |           |  b\  |  m&  |      |      |      | ____ |
  * `-----------------------------------------'           `-----------------------------------------'
  *        ,------.         ,--------------------.    ,--------------------.          ,------.
  *        | MUTE |         | LOWER|      |      |    |  Del |      | RAISE|          | MUTE |
@@ -139,9 +140,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                         `--------------------'    `--------------------.
  */
 [_LOWER] = LAYOUT_ximi(
-  _______,      KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,      KC_CIRC, KC_AMPR, KC_ASTR, KC_EQL, KC_GT, _______,
-  _______,      KC_ESC,  KC_LBRC, KC_LPRN, KC_RPRN, KC_RBRC,       _______, KC_UNDS, KC_PLUS, KC_TILD, KC_GRV, _______,
-  _______,      KC_CAPS, KC_TILD, KC_LCBR, KC_RCBR,  QK_BOOT,      _______, _______, KC_PIPE, KC_PIPE,  KC_DQT, _______,
+  _______,      _______, _______, _______, KC_PLUS, _______,      _______, KC_GRV , KC_CIRC, KC_PERC, _______, DT_UP,
+  _______,      KC_AT  , KC_PIPE, KC_EQL , _______, _______,      _______, KC_HASH, KC_TILD, KC_EXLM, KC_DLR , DT_DOWN,
+  QK_BOOT,      KC_CAPS, _______, _______, _______, KC_ASTR,      KC_BSLS, KC_AMPR, _______, _______, _______, DT_PRNT,
+
                 _______,          _______, _______, _______,      KC_DEL,  _______, _______,          _______,
                                   _______, _______, _______,      _______, _______, _______
 ),
